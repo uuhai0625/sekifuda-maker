@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<script>
+  (function() {
+    var GA_ID = 'G-VDM6SM0EZS';
+    var isLocalDev = ['localhost', '127.0.0.1', ''].includes(location.hostname);
+    if (isLocalDev) return;
+    try { if (/[?&]no_ga=0/.test(location.search)) localStorage.removeItem('no_ga'); if (/[?&]no_ga=1/.test(location.search)) localStorage.setItem('no_ga', '1'); if (localStorage.getItem('no_ga') === '1') return; } catch (e) {}
+    var gaQ = new URLSearchParams(location.search); if (gaQ.get('obs') === '1' || gaQ.get('no_ga') === '1') return;
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
+    document.head.appendChild(s);
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', GA_ID);
+    document.addEventListener('click', function(e) {
+      var a = e.target && e.target.closest ? e.target.closest('a[href*="booth.pm"]') : null;
+      if (!a) return;
+      gtag('event', 'booth_click', { link_url: a.href, link_id: a.id || '', link_text: (a.textContent || '').trim().slice(0, 40) });
+    });
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="席札テンプレートを無料で作成・印刷。名前を1行に1人入れるだけで、二つ折り(名刺サイズ91&#215;55mm・A4を4等分)や、会議用の大きい二つ折り・三角柱の席札ができます。敬称(様・さん・殿)・肩書き・書体・枠を選べて、裏にも名前を入れられます。結婚式・会議・式典・食事会に。登録不要。">
+<link rel="canonical" href="https://uuhai0625.github.io/sekifuda-maker/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:title" content="席札メーカー|席札テンプレートを無料で作成・印刷(二つ折り・三角柱・会議用・結婚式)">
+<meta property="og:description" content="席札テンプレートを無料で作成・印刷。名前を1行に1人入れるだけで、二つ折り(名刺サイズ91&#215;55mm・A4を4等分)や、会議用の大きい二つ折り・三角柱の席札ができます。敬称(様・さん・殿)・肩書き・書体・枠を選べて、裏にも名前を入れられます。結婚式・会議・式典・食事会に。登録不要。">
+<meta property="og:url" content="https://uuhai0625.github.io/sekifuda-maker/">
+<meta property="og:image" content="https://uuhai0625.github.io/sekifuda-maker/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<title>席札メーカー|席札テンプレートを無料で作成・印刷(二つ折り・三角柱・会議用・結婚式)</title>
+<style>
+  :root {
+    --bg: #f6f4f1;
+    --panel: #ffffff;
+    --border: #e2ddd5;
+    --field-border: #55504a;
+    --text: #26231f;
+    --muted: #5a554e;
+    --accent: #3d5a80;
+    --accent-dark: #2b3f5c;
+    --ng: #b3261e;
+    --locked: #d9d2c6;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+  header { background: var(--accent-dark); color: #fff; padding: 24px 20px 18px; text-align: center; }
+  header h1 { margin: 0 0 6px; font-size: 1.35rem; }
+  header p { margin: 0; font-size: .9rem; }
+  main { max-width: 1120px; margin: 0 auto; padding: 22px 16px 50px; }
+  .layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); grid-template-areas: "names pv" "shape pv" "look pv"; column-gap: 18px; align-items: start; }
+  .layout > * { min-width: 0; }
+  #names-card { grid-area: names; } #shape-card { grid-area: shape; } #look-card { grid-area: look; }
+  #pv-card { grid-area: pv; position: sticky; top: 12px; }
+  section.card { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; margin-bottom: 18px; }
+  section.card h2 { margin: 0 0 6px; font-size: 1.05rem; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .fine { color: var(--muted); font-size: .86rem; margin: 8px 0 0; }
+  .badge { display: inline-block; font-size: .7rem; padding: 2px 8px; border-radius: 999px; background: #e3eaf3; color: #2b3f5c; font-weight: bold; }
+  .hidden { display: none !important; }
+  label.field, div.field { display: block; margin-bottom: 12px; }
+  .lbl { font-size: .9rem; font-weight: bold; display: block; }
+  .hint { font-size: .875rem; color: var(--muted); font-weight: normal; display: block; margin-top: 2px; }
+  select, input[type=text], textarea { margin-top: 5px; min-height: 44px; border: 1px solid var(--field-border); border-radius: 8px; font-size: 1rem; font-family: inherit; background: #fff; color: var(--text); width: 100%; padding: 8px 10px; }
+  textarea { min-height: 170px; resize: vertical; line-height: 1.5; }
+  .row2 { display: flex; gap: 12px; }
+  .row2 > * { flex: 1; min-width: 0; }
+  .chk { display: flex; align-items: center; gap: 8px; min-height: 44px; font-size: .92rem; cursor: pointer; }
+  .chk input { width: 20px; height: 20px; accent-color: var(--accent); flex: none; }
+  .btn-row { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+  .btn { min-height: 44px; min-width: 44px; padding: 9px 16px; border-radius: 8px; font-size: .9rem; cursor: pointer; border: 1px solid var(--field-border); background: #fff; color: var(--text); font-family: inherit; }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: bold; }
+  .btn.small { padding: 6px 12px; font-size: .85rem; }
+  .btn:focus-visible, a:focus-visible, select:focus-visible, input:focus-visible, textarea:focus-visible { outline: 3px solid #c2410c; outline-offset: 2px; }
+  .btn-row .btn { flex: 1; }
+  .status { font-size: .88rem; color: var(--muted); margin-top: 6px; min-height: 1.2em; }
+  .status.err { color: var(--ng); font-weight: bold; }
+  .pv { border: 1px solid var(--border); border-radius: 8px; background: #e6e1d8; padding: 12px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+  .pv canvas { width: 100%; height: auto; display: block; box-shadow: 0 1px 4px rgba(0,0,0,.25); background: #fff; }
+  .guide { font-size: .9rem; }
+  .guide h3 { font-size: .95rem; margin: 14px 0 4px; }
+  .guide ul, .guide ol { padding-left: 1.3em; margin: 6px 0; }
+  .guide li { margin: 4px 0; }
+  .locked-panel { border: 1px dashed var(--locked); border-radius: 10px; padding: 16px; text-align: center; color: var(--muted); background: #fbfaf8; }
+  .locked-panel .lead { color: var(--text); font-weight: bold; }
+  .locked-panel .feat-list { text-align: left; max-width: 620px; margin: 10px auto; font-size: .88rem; padding-left: 1.2em; }
+  .buy-btn { display: inline-block; margin-top: 8px; background: var(--accent-dark); color: #fff; font-weight: bold; padding: 11px 22px; border-radius: 999px; text-decoration: none; font-size: .9rem; }
+  footer { max-width: 1120px; margin: 0 auto; padding: 0 16px 40px; font-size: .84rem; color: var(--muted); }
+  footer p { margin: 10px 0; }
+  footer a { color: var(--muted); }
+  #printArea { display: none; }
+  .jump { display: none; margin-top: 6px; font-size: .95rem; padding: 10px 0; }
+  @media (min-width: 861px) {
+    .pv canvas { max-height: calc(100vh - 120px); width: auto; max-width: 100%; }
+  }
+  @media (max-width: 860px) {
+    .layout { grid-template-columns: minmax(0, 1fr); grid-template-areas: "names" "shape" "look" "pv"; }
+    #pv-card { position: static; }
+    .jump { display: inline-block; }
+  }
+  @media (max-width: 600px) {
+    .row2 { flex-direction: column; gap: 0; }
+    section.card { padding: 16px 12px; }
+  }
+  @media print {
+    body.printing > * { display: none !important; }
+    body.printing > #printArea { display: block !important; }
+    #printArea img { display: block; break-after: page; }
+    #printArea img:last-child { break-after: auto; }
+  }
+</style>
+<style id="pageStyle">@page { size: A4 portrait; margin: 0; }</style>
+<!--ANSHIN_CSS_START--><style>:root{--anshin-w:1088px;--anshin-pad:16px}.anshin-strip,.anshin{box-sizing:border-box;width:min(var(--anshin-w),calc(100% - 2 * var(--anshin-pad)));margin-left:auto;margin-right:auto}.anshin-strip{list-style:none;margin-top:10px;margin-bottom:0;padding:0;display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;font-size:.8rem;line-height:1.5}.anshin-strip li{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border:1px solid rgba(20,120,90,.45);border-radius:999px;background:rgba(20,120,90,.07)}.anshin-strip li.anshin-more{border:0;background:none;padding:3px 2px}.anshin-strip a,.anshin a{color:inherit}.anshin{margin-top:18px;margin-bottom:18px;padding:14px 18px;border:1px solid rgba(20,120,90,.45);border-radius:10px;background:rgba(20,120,90,.05);font-size:.86rem;line-height:1.7}.anshin h2{font-size:1rem;margin:0 0 6px}.anshin p{margin:0 0 6px}.anshin ul{margin:0;padding-left:1.2em}.anshin li{margin:3px 0}.anshin details{margin-top:6px}.anshin summary{cursor:pointer;font-weight:bold}.anshin .anshin-meta{margin:8px 0 0;font-size:.8rem;opacity:.85}@media print{.anshin,.anshin-strip{display:none!important}}</style><!--ANSHIN_CSS_END-->
+<!--UPSELL_CSS_START--><style>.upsell-top{box-sizing:border-box;width:min(var(--anshin-w,880px),calc(100% - 2 * var(--anshin-pad,16px)));margin:12px auto 0;font-size:.85rem;line-height:1.6}.upsell-top a{color:inherit}.upsell-assure{list-style:none;margin:12px 0 10px;padding:0;display:flex;flex-wrap:wrap;gap:6px 8px;font-size:.8rem;line-height:1.5}.upsell-assure li{padding:3px 10px;border:1px solid rgba(20,120,90,.45);border-radius:12px;background:rgba(20,120,90,.06)}.upsell-terms{margin:8px 0 0;font-size:.78rem;line-height:1.6;opacity:.85}.upsell-toast{position:fixed;left:50%;bottom:12px;transform:translateX(-50%);z-index:9999;box-sizing:border-box;width:min(520px,calc(100% - 24px));padding:14px 56px 14px 16px;border-radius:12px;background:#fff;color:#222;border:1px solid #c9c2d6;box-shadow:0 6px 24px rgba(0,0,0,.18);font-size:.88rem;line-height:1.6}.upsell-toast p{margin:0 0 6px;font-weight:bold}.upsell-toast ul{margin:0 0 10px;padding-left:1.2em}.upsell-toast li{margin:2px 0}.upsell-toast .upsell-note{display:block;margin-top:6px;font-size:.75rem;color:#555}.upsell-toast .upsell-go{display:inline-flex;align-items:center;min-height:44px;padding:0 18px;border-radius:8px;background:#c9283e;color:#fff;font-weight:bold;text-decoration:none}.upsell-toast .upsell-go:focus-visible,.upsell-toast .upsell-x:focus-visible{outline:3px solid #2560c4;outline-offset:2px}.upsell-toast .upsell-x{position:absolute;top:4px;right:4px;width:44px;height:44px;border:0;border-radius:8px;background:transparent;color:#555;font-size:1.3rem;line-height:1;cursor:pointer}.upsell-inline{white-space:nowrap;color:inherit;text-decoration:underline;text-underline-offset:2px}@media print{.upsell-top,.upsell-assure,.upsell-terms,.upsell-toast,.upsell-inline{display:none!important}}</style><!--UPSELL_CSS_END-->
+</head>
+<body>
+
+<header>
+  <h1>席札メーカー</h1>
+  <p>名前を1行に1人入れるだけで、席札を作って印刷できます。二つ折り(名刺サイズ・A4を4等分)と、会議用の大きい二つ折り・三角柱に。敬称・肩書き・書体・枠を選べて、裏にも名前を入れられます。結婚式・会議・式典・食事会に。登録不要・スマホでも使えます</p>
+</header>
+<!--ANSHIN_STRIP_START-->
+<ul class="anshin-strip" aria-label="データの扱い">
+  <li><span aria-hidden="true">✓</span> 入力内容はこの端末の中だけで処理</li>
+  <li><span aria-hidden="true">✓</span> 登録・ログイン不要</li>
+  <li><span aria-hidden="true">✓</span> 仕組みを公開中</li>
+  <li class="anshin-more"><a href="#anshin">データの扱いをくわしく</a></li>
+</ul>
+<!--ANSHIN_STRIP_END-->
+<!--UPSELL_TOP_START--><p class="upsell-top no-print" id="upsellTop">このページは無料のまま使えます。機能を増やしたい方は <a href="#pro-section">買い切り版(¥100・1回払い)<span aria-hidden="true"> ↓</span></a></p><!--UPSELL_TOP_END-->
+
+<main>
+<div class="layout">
+
+  <section class="card" id="names-card">
+    <h2>① 名前</h2>
+    <label class="field"><span class="lbl">名前(1行に1人)</span><textarea id="inNames" spellcheck="false" placeholder="例:&#10;山田 太郎&#10;佐藤 花子	営業部 部長&#10;鈴木 一郎" aria-describedby="namesHint"></textarea><span class="hint" id="namesHint"></span></label>
+    <div class="row2">
+      <label class="field"><span class="lbl">敬称</span><select id="inHonor" aria-describedby="honorHint"><option value="様" selected>様</option><option value="さん">さん</option><option value="殿">殿(社内・公的な場向け)</option><option value="">なし</option></select><span class="hint" id="honorHint">名前の最後が「くん・ちゃん・先生・部長・ご夫妻」などのときは付けません</span></label>
+      <label class="field"><span class="lbl">全員の肩書き(空欄でもかまいません)</span><input type="text" id="inCommonTitle" maxlength="24" placeholder="例: ご来賓"><span class="hint">一人ずつの肩書きがあるときは、そちらを使います</span></label>
+    </div>
+    <a class="jump" href="#pv-card">見本へ ↓</a>
+  </section>
+
+  <section class="card" id="shape-card">
+    <h2>② 形と大きさ</h2>
+    <label class="field"><span class="lbl">形</span>
+      <select id="inSize">
+        <option value="s" selected>二つ折り・小(仕上がり 91×55mm・名刺サイズ、A4に4枚)</option>
+        <option value="m">二つ折り・中(仕上がり 105×74mm・A4を4等分)</option>
+        <option value="l">二つ折り・大(A4横を半分に折る・会議や受付に)</option>
+        <option value="t">三角柱(A4横を3つに折る・会議に)</option>
+      </select>
+    </label>
+    <label class="field"><span class="lbl">裏(向こう側)</span>
+      <select id="inBack">
+        <option value="blank">何も入れない</option>
+        <option value="same">裏にも同じ名前(向かいの席からも読める)</option>
+        
+      </select>
+    </label>
+    
+    <p class="fine" id="shapeNote"></p>
+    <a class="jump" href="#pv-card">見本へ ↓</a>
+  </section>
+
+  <section class="card" id="look-card">
+    <h2>③ 見た目</h2>
+    <div class="row2">
+      <label class="field"><span class="lbl">書体</span><select id="inFont"><option value="mincho" selected>明朝</option><option value="gothic">ゴシック</option><option value="maru">丸ゴシック</option></select></label>
+      <label class="field"><span class="lbl">枠</span><select id="inFrame"><option value="none">なし</option><option value="line">細い線</option><option value="double" selected>二重線</option><option value="corner">角かざり</option></select></label>
+    </div>
+    <div class="row2">
+      <label class="field"><span class="lbl">色</span><select id="inColor"><option value="black">黒</option><option value="navy" selected>紺</option><option value="gold">金茶</option><option value="red">えんじ</option></select></label>
+    </div>
+    <label class="chk"><input type="checkbox" id="inGuides" checked> 切り線・折り線を入れる</label>
+    <div class="btn-row"><button type="button" class="btn small" id="clearBtn">入力を全部消す</button></div>
+  </section>
+
+  <section class="card" id="pv-card">
+    <h2>④ 見本・印刷</h2>
+    <p class="status" id="sumNote"></p>
+    <p class="status" id="warnNote" role="status"></p>
+    <label class="field" id="pageField"><span class="lbl">見本のページ</span><select id="inPage"></select></label>
+    <p class="fine" style="margin-top:0"><strong>印刷は倍率「100%」(実際のサイズ)で。</strong>「用紙に合わせる」はオフにします。厚めの紙(はがき用紙・ケント紙など、切れ目のないもの)がおすすめです。外側の線に沿って切り、点線で山折りにして立てます。</p>
+    <label class="field hidden" id="rangeField"><span class="lbl">印刷・保存するページ(多いときは分けて)</span><select id="inRange"></select></label>
+    <div class="btn-row" style="margin-top:4px">
+      <button type="button" class="btn primary" id="printBtn">印刷する</button>
+      <button type="button" class="btn" id="pngBtn">画像で保存</button>
+    </div>
+    <div class="status" id="outSt" role="status"></div>
+    <div class="pv" id="pv"></div>
+    <a class="jump" href="#names-card">↑ 入力に戻る</a>
+  </section>
+
+</div>
+
+  <section class="card" id="pro-section">
+    <h2>人数が多い席札・裏のメッセージ <span class="badge">買い切り版 ¥100(税込)</span></h2>
+    <div class="locked-panel">
+      <p class="lead">結婚式や大きな会の席札を、まとめて。</p>
+      <p>このページの機能は無料でそのまま使えます。買い切り版(ダウンロード購入)では、次の機能が増えます:</p>
+      <ul class="feat-list">
+        <li><strong>裏に一人ずつのメッセージ</strong>: 名前の裏側(手に取って読む面)に、名前ごとのメッセージ(120文字まで、結婚式の席札に)。全員共通のメッセージも入れられます</li>
+        <li><strong>卓名(テーブル名)</strong>: 名前の面の左上に「A卓」「松」などを小さく入れられます</li>
+        <li><strong>300人まで</strong>(無料版は12人まで)。結婚式の招待客をまとめて貼り付けて、一度に作れます</li>
+        <li><strong>2枚以上の画像はZIPでまとめて保存・ツール名が入りません</strong>(無料版は1枚ずつ保存、用紙のすみに小さくツール名が入ります)</li>
+        <li><strong>パソコンで使うHTMLファイルです</strong>(スマホでの動作は保証していません)。ダウンロードしたファイルなので、ネットにつながっていなくても開けます</li>
+      </ul>
+<!--UPSELL_ASSURE_START--><ul class="upsell-assure" aria-label="買い切り版について"><li>¥100(税込)の1回払い・月額なし</li><li>パソコン向けのHTMLファイル(スマホでは開けない機種あり)</li><li>ネットにつながっていなくても動く</li><li>BOOTHで購入(クレジットカード・楽天ペイは手数料なし、コンビニ・銀行払いは別途手数料)</li></ul><!--UPSELL_ASSURE_END-->
+      <a class="buy-btn" href="https://uuhai0625.booth.pm/items/9019170" id="buyLink" target="_blank" rel="noopener">パソコン用の買い切り版を見る(BOOTH・新しいタブ)</a><!--UPSELL_TERMS_START--><p class="upsell-terms">販売者の情報・返品などの販売条件は、BOOTHの商品ページでご確認ください。BOOTHでの購入にはpixivのアカウントが必要です。</p><!--UPSELL_TERMS_END-->
+    </div>
+  </section>
+
+  <section class="card guide" id="guide">
+    <h2>席札の作り方</h2>
+    <ol>
+      <li>名前を1行に1人入れます。Excelの列をそのまま貼り付けられます(1列目=名前、2列目=肩書き。買い切り版は3列目=メッセージ、4列目=卓名)。「|」で区切っても入れられます。</li>
+      <li>形を選びます。結婚式や食事会は「二つ折り・小」か「中」、会議は「二つ折り・大」か「三角柱」が使いやすい大きさです。</li>
+      <li>厚めの紙に、倍率100%で印刷します。外側の線に沿って切り、点線で山折りにして立てます。三角柱は、底の面を内側に折り、いちばん下の「のりしろ」を上の面のふちの裏にのりかテープで留めます。</li>
+    </ol>
+    <h3>よくある質問</h3>
+    <ul>
+      <li><strong>どっちが表?</strong> 下半分が表(名前を見せる側)、上半分は逆さまに印刷され、折ると裏の面になります。</li>
+      <li><strong>敬称は付けたほうがいい?</strong> 結婚式や式典では「様」、社内の会議では敬称なしか「さん」が多いです。お子さまは名前に「くん・ちゃん」まで入れると、様は付きません。「部長」など役職を名前に付けたときも様は付けません。「殿」は社内や公的な場向けで、来賓やお客さまには「様」が無難です。</li>
+      <li><strong>外側の枠が欠ける</strong> 二つ折り・中は用紙いっぱいに並べるので、フチなし印刷ができないプリンターでは、用紙のふちの近くが少し欠けることがあります。気になるときは「小」を選んでください。</li>
+      <li><strong>名前が長いときは?</strong> 枠に収まるように、文字を細く・小さくします。肩書きは24文字まで、名前は16文字までです。</li>
+      <li><strong>入れた名前はどこかに送られる?</strong> 入力した文字はどこにも送られません。すべてこのブラウザの中で処理し、このブラウザにだけ自動で保存します。共用のパソコンでは、使い終わったら「入力を全部消す」を押してください。</li>
+    </ul>
+  </section>
+
+</main>
+
+<!--ANSHIN_START-->
+<section class="anshin" id="anshin" aria-labelledby="anshin-title">
+  <h2 id="anshin-title">データの扱いについて</h2>
+  <p>このページには、入力した内容を受け取る仕組みがありません。入力した文字や数字は、あなたのスマホやパソコンの中だけで処理されます。</p>
+  <ul>
+    <li>会員登録・ログイン・メールアドレスの入力はありません。</li>
+    <li>自分で確かめたい方へ: ページを開いたあと機内モードにしても、そのまま使えます。</li>
+  </ul>
+  <details>
+    <summary>もっとくわしく(保存・アクセス解析・公開について)</summary>
+    <ul>
+      <li>保存されるデータは、この端末のこのブラウザの中にだけ残ります(localStorage・sessionStorage)。共用のパソコンでは使い終わったら消してください。</li>
+      <li>アクセス解析(Google Analytics)のため、見たページのURL・参照元・端末やブラウザの種類・おおよその地域(IPアドレスから推定)・Cookieの識別子・BOOTHへのリンクのクリック・どのボタンを押したか(回数や選んだ設定を含む)がGoogleに送られます。目的は利用状況の把握です。入力した文字や画像は送りません。(<a href="https://policies.google.com/technologies/partner-sites?hl=ja" target="_blank" rel="noopener">Googleによるデータの使用</a>/<a href="https://tools.google.com/dlpage/gaoptout?hl=ja" target="_blank" rel="noopener">計測を止めるアドオン</a>。止めてもツールはそのまま使えます)</li>
+      <li>このツールの結果や作成物は目安です。入稿・契約・販売などの前には、印刷所や公式の情報でご確認ください。</li>
+      <li>処理の中身はすべて公開しています(詳しい方向け: <a href="https://github.com/uuhai0625/sekifuda-maker" target="_blank" rel="noopener">GitHub</a>)。</li>
+    </ul>
+  </details>
+  <p class="anshin-meta">作っている人: ウーハイ(個人開発)/不具合・ご質問は<a href="https://x.com/uuhai0625" target="_blank" rel="noopener">X(@uuhai0625)</a>へ/<a href="https://uuhai0625.github.io/" target="_blank" rel="noopener">ほかのツール</a>/この説明の更新日: 2026-10-13</p>
+</section>
+<!--ANSHIN_END-->
+
+<footer>
+  <p id="privacyNote">入力した内容はどこにも送信されません(すべてこのブラウザの中で処理し、このブラウザにだけ自動で保存します)。</p>
+  <p><a href="https://uuhai0625.booth.pm/" target="_blank" rel="noopener">他のツールも見る(BOOTHショップ)</a></p>
+  <p>不具合・ご要望は X <a href="https://x.com/uuhai0625" target="_blank" rel="noopener">@uuhai0625</a> まで。</p>
+  <p class="related-tools no-print">関連する無料ツール: <a href="https://uuhai0625.github.io/banquet-seating-allergen/" target="_blank" rel="noopener">宴会配席表</a> ・ <a href="https://uuhai0625.github.io/noshi-maker/" target="_blank" rel="noopener">のし紙メーカー</a> ・ <a href="https://uuhai0625.github.io/shoujo-maker/" target="_blank" rel="noopener">賞状メーカー</a> ・ <a href="https://uuhai0625.github.io/#free-tools">ツール一覧</a></p>
+</footer>
+
+<div id="printArea"></div>
+
+<script>
+(function () {
+  "use strict";
+
+  var EDITION = "free"; // "full" で買い切り完全版
+
+  function track(name, params) {
+    if (!window.dataLayer) return;
+    (function () { window.dataLayer.push(arguments); })("event", name, params || {});
+  }
+  var $ = function (id) { return document.getElementById(id); };
+  function setSt(id, msg, err) { var e = $(id); if (!e) return; if (e.textContent !== msg) e.textContent = msg; e.classList.toggle("err", !!err); }
+
+  var CREDIT = true, MAXN = 12;
+  
+  var STORE = EDITION === "full" ? "uuhai-sekifuda-v1-full" : "uuhai-sekifuda-v1";
+  var FONTS = {
+    mincho: '"Yu Mincho", "YuMincho", "Hiragino Mincho ProN", "BIZ UDPMincho", "MS PMincho", serif',
+    gothic: '"Yu Gothic", "YuGothic", "Hiragino Kaku Gothic ProN", "BIZ UDPGothic", "Meiryo", sans-serif',
+    maru: '"Hiragino Maru Gothic ProN", "Zen Maru Gothic", "BIZ UDGothic", "Yu Gothic", "Meiryo", sans-serif'
+  };
+  var COLORS = { black: "#1f1f1f", navy: "#22385e", gold: "#8a6a2a", red: "#8c2433" };
+  // 用紙と1枚(広げた形)の大きさ。faces=面の数(上から)、三角柱は3面目が底
+  var SIZES = {
+    s: { paper: [210, 297], cw: 91, ch: 110, faces: 2, cols: 2, rows: 2, name: "二つ折り・小" },
+    m: { paper: [210, 297], cw: 105, ch: 148.5, faces: 2, cols: 2, rows: 2, name: "二つ折り・中" },
+    l: { paper: [297, 210], cw: 297, ch: 210, faces: 2, cols: 1, rows: 1, name: "二つ折り・大" },
+    t: { paper: [297, 210], cw: 297, ch: 210, faces: 3, cols: 1, rows: 1, name: "三角柱", hs: [70, 70, 55, 15] }
+  };
+
+  // ===== 入力 =====
+  function clip(s, n) { return Array.from(String(s || "").trim()).slice(0, n).join(""); }
+  function people() {
+    var raw = $("inNames").value.split(/\r?\n/), out = [];
+    out.skipped = 0;
+    raw.forEach(function (line) {
+      if (!line.trim()) return;
+      var c = line.split(/\t|\||｜/);
+      var nm = clip(c[0], 16);
+      if (!nm) { out.skipped++; return; }
+      out.push({ name: nm, title: clip(c[1], 24), msg: clip(c[2], 120), table: clip(c[3], 8) });
+    });
+    return out;
+  }
+  function conf() {
+    var all = people(), size = SIZES[$("inSize").value] ? $("inSize").value : "s", back = $("inBack").value;
+    if (back !== "same" && back !== "msg") back = "blank";
+    return {
+      all: all.length, list: all.slice(0, MAXN), cut: all.length > MAXN, skipped: all.skipped,
+      honor: $("inHonor").value, commonTitle: clip($("inCommonTitle").value, 24),
+      size: size, S: SIZES[size], back: back, commonMsg: $("inCommonMsg") ? clip($("inCommonMsg").value, 120) : "",
+      font: FONTS[$("inFont").value] || FONTS.mincho, frame: $("inFrame").value, color: COLORS[$("inColor").value] || COLORS.navy,
+      guides: $("inGuides").checked
+    };
+  }
+
+  // 名前の最後がこれなら敬称を付けない(二重敬称を避ける)
+  var NO_HONOR = /(様|さま|さん|殿|くん|君|ちゃん|先生|ご夫妻|御夫妻|夫妻|ご一家|御一家|ご家族|社長|会長|部長|課長|係長|主任|専務|常務|取締役|所長|支店長|店長|院長|校長|教頭|園長|議長|委員長|理事長|局長)$/;
+  // ===== 描画 =====
+  function setFont(ctx, size, bold, C) { ctx.font = (bold ? "bold " : "") + size + "px " + C.font; }
+  function insetOf(w, h, C) { return C.size === "s" ? Math.min(w, h) * 0.07 : Math.max(Math.min(w, h) * 0.07, 8); }
+  function frame(ctx, w, h, k, C) {
+    var ins = insetOf(w, h, C), x = -w / 2 + ins, y = -h / 2 + ins, fw = w - 2 * ins, fh = h - 2 * ins;
+    ctx.strokeStyle = C.color;
+    if (C.frame === "line") { ctx.lineWidth = 0.35 * k; ctx.strokeRect(x * k, y * k, fw * k, fh * k); }
+    else if (C.frame === "double") {
+      ctx.lineWidth = 0.6 * k; ctx.strokeRect(x * k, y * k, fw * k, fh * k);
+      ctx.lineWidth = 0.25 * k; ctx.strokeRect((x + 1.2) * k, (y + 1.2) * k, (fw - 2.4) * k, (fh - 2.4) * k);
+    } else if (C.frame === "corner") {
+      var L = Math.min(fw, fh) * 0.22; ctx.lineWidth = 0.5 * k;
+      [[x, y, 1, 1], [x + fw, y, -1, 1], [x, y + fh, 1, -1], [x + fw, y + fh, -1, -1]].forEach(function (c) {
+        ctx.beginPath(); ctx.moveTo(c[0] * k, (c[1] + c[3] * L) * k); ctx.lineTo(c[0] * k, c[1] * k); ctx.lineTo((c[0] + c[2] * L) * k, c[1] * k); ctx.stroke();
+        var d = 1.6; ctx.beginPath(); ctx.moveTo((c[0] + c[2] * 3) * k, (c[1] + c[3] * (3 - d)) * k); ctx.lineTo((c[0] + c[2] * (3 + d)) * k, (c[1] + c[3] * 3) * k); ctx.lineTo((c[0] + c[2] * 3) * k, (c[1] + c[3] * (3 + d)) * k); ctx.lineTo((c[0] + c[2] * (3 - d)) * k, (c[1] + c[3] * 3) * k); ctx.closePath(); ctx.fillStyle = C.color; ctx.fill();
+      });
+    }
+    return ins;
+  }
+  // 横に入りきらないときは、まず文字を細く(最大60%まで)、それでも入らなければ小さくする
+  function fitText(ctx, text, maxW, size, minSize, bold, C) {
+    setFont(ctx, size, bold, C);
+    var w = ctx.measureText(text).width, sx = 1;
+    if (w > maxW) { sx = Math.max(0.6, maxW / w); if (w * sx > maxW) { size = Math.max(minSize, size * maxW / (w * sx)); setFont(ctx, size, bold, C); w = ctx.measureText(text).width; sx = Math.min(1, maxW / w); } }
+    return { size: size, sx: sx, w: w * sx };
+  }
+  function drawName(ctx, p, w, h, k, C) {
+    var ins = frame(ctx, w, h, k, C), aw = (w - 2 * ins - Math.min(w, h) * 0.1), title = p.title || C.commonTitle;
+    var hon = C.honor && !NO_HONOR.test(p.name) ? C.honor : "";
+    var big = Math.min(h * (title ? 0.3 : 0.36), w * 0.16), hs = big * 0.55, gap = hon ? big * 0.25 : 0;
+    setFont(ctx, hs * k, true, C); var hw = hon ? ctx.measureText(hon).width : 0;
+    var n = fitText(ctx, p.name, aw * k - hw - gap * k, big * k, big * 0.3 * k, true, C);
+    if (hon && n.size < big * k) { hs = hs * n.size / (big * k); setFont(ctx, hs * k, true, C); hw = ctx.measureText(hon).width; }
+    var total = n.w + (hon ? gap * k * n.size / (big * k) + hw : 0), x0 = -total / 2, ny = title ? h * 0.1 : h * 0.02;
+    ctx.fillStyle = C.color; ctx.textBaseline = "alphabetic"; ctx.textAlign = "left";
+    var base = (ny + n.size / k * 0.36) * k;
+    ctx.save(); ctx.translate(x0, base); ctx.scale(n.sx, 1); setFont(ctx, n.size, true, C); ctx.fillText(p.name, 0, 0); ctx.restore();
+    if (hon) { setFont(ctx, hs * k, true, C); ctx.fillText(hon, x0 + n.w + gap * k * n.size / (big * k), base); }
+    
+    if (title) {
+      var ts = Math.min(h * 0.11, big * 0.42), t = fitText(ctx, title, aw * k, ts * k, ts * 0.4 * k, false, C);
+      ctx.save(); ctx.translate(0, (ny - n.size / k * 0.62 - ts * 0.35) * k); ctx.scale(t.sx, 1); setFont(ctx, t.size, false, C); ctx.textAlign = "center"; ctx.fillText(title, 0, 0); ctx.restore();
+    }
+  }
+  function drawMsg(ctx, text, w, h, k, C) {
+    var ins = frame(ctx, w, h, k, C), aw = (w - 2 * ins - Math.min(w, h) * 0.12) * k, ah = (h - 2 * ins - Math.min(w, h) * 0.12) * k;
+    var paras = String(text || "").split(/[\/／]/).map(function (s) { return s.trim(); }).filter(Boolean);
+    if (!paras.length) return;
+    var size = Math.min(h * 0.11, 7) * k, lines;
+    for (var tries = 0; tries < 30; tries++) {
+      setFont(ctx, size, false, C); lines = [];
+      paras.forEach(function (pa) {
+        var cur = "";
+        Array.from(pa).forEach(function (ch) { if (ctx.measureText(cur + ch).width > aw && cur) { lines.push(cur); cur = ch; } else cur += ch; });
+        lines.push(cur);
+      });
+      if (lines.length * size * 1.5 <= ah || size <= 2.4 * k) break;
+      size *= 0.92;
+    }
+    ctx.fillStyle = C.color; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    var lh = size * 1.5, top = -lh * (lines.length - 1) / 2;
+    lines.forEach(function (ln, i) { ctx.fillText(ln, 0, top + lh * i); });
+  }
+  function face(ctx, kind, p, x, y, w, h, rot, k, C) {
+    ctx.save(); ctx.beginPath(); ctx.rect(x * k, y * k, w * k, h * k); ctx.clip(); ctx.translate((x + w / 2) * k, (y + h / 2) * k); if (rot) ctx.rotate(Math.PI);
+    if (kind === "name") drawName(ctx, p, w, h, k, C);
+    else if (kind === "msg") drawMsg(ctx, p.msg || C.commonMsg, w, h, k, C);
+    else if (kind === "base") { ctx.fillStyle = "#9a9a9a"; setFont(ctx, 3 * k, false, C); ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText("底(内側に折る)", 0, 0); }
+    else if (kind === "glue") { ctx.fillStyle = "#ededed"; ctx.fillRect(-w / 2 * k, -h / 2 * k, w * k, h * k); ctx.fillStyle = "#8a8a8a"; setFont(ctx, 3 * k, false, C); ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText("のりしろ(上の面のふちの裏に貼る)", 0, 0); }
+    ctx.restore();
+  }
+  function drawCard(ctx, p, x, y, k, C) {
+    var S = C.S, hs = S.hs || [S.ch / 2, S.ch / 2], backKind = C.back === "same" ? "name" : C.back === "msg" ? "msg" : "blank";
+    // 上の面=裏(逆さま)、その下=表。三角柱は3面目が底、4面目がのりしろ
+    var kinds = [backKind, "name", "base", "glue"], yy = y;
+    hs.forEach(function (fh, i) { face(ctx, kinds[i], p, x, yy, S.cw, fh, i === 0, k, C); yy += fh; });
+    if (C.guides) {
+      ctx.save(); ctx.strokeStyle = "#b0b0b0"; ctx.lineWidth = 0.25 * k; ctx.setLineDash([1.6 * k, 1.2 * k]);
+      yy = y; for (var f = 0; f < hs.length - 1; f++) { yy += hs[f]; ctx.beginPath(); ctx.moveTo(x * k, yy * k); ctx.lineTo((x + S.cw) * k, yy * k); ctx.stroke(); }
+      ctx.restore();
+    }
+  }
+  function layout(C) {
+    var S = C.S, per = S.cols * S.rows, P = S.paper, ox = (P[0] - S.cols * S.cw) / 2, oy = (P[1] - S.rows * S.ch) / 2, pages = [];
+    var list = C.list.length ? C.list : [{ name: "", title: "", msg: "" }];
+    for (var i = 0; i < list.length; i += per) pages.push(list.slice(i, i + per));
+    return { per: per, ox: ox, oy: oy, pages: pages, P: P };
+  }
+  function drawPage(ctx, C, L, pi, k) {
+    var S = C.S, P = L.P;
+    ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, P[0] * k, P[1] * k);
+    L.pages[pi].forEach(function (p, j) {
+      var x = L.ox + (j % S.cols) * S.cw, y = L.oy + Math.floor(j / S.cols) * S.ch;
+      if (p.name) drawCard(ctx, p, x, y, k, C);
+    });
+    if (C.guides && (S.cols > 1 || S.rows > 1)) {
+      // 切り線(1枚ずつの外枠)
+      ctx.strokeStyle = "#b5b5b5"; ctx.lineWidth = 0.2 * k;
+      L.pages[pi].forEach(function (p, j) { if (!p.name) return; var x = L.ox + (j % S.cols) * S.cw, y = L.oy + Math.floor(j / S.cols) * S.ch; ctx.strokeRect(x * k, y * k, S.cw * k, S.ch * k); });
+    }
+    // 無料版のツール名: 小は用紙の余白、三角柱は底の面、中・大は裏の面の外側のふち(枠の外)に小さく
+    if (CREDIT) {
+      ctx.save(); ctx.fillStyle = "#8a8a8a"; ctx.font = (2.2 * k) + "px " + FONTS.gothic; ctx.textBaseline = "alphabetic";
+      if (C.size === "s") { ctx.textAlign = "right"; ctx.fillText("席札メーカー", (P[0] - 14) * k, (P[1] - 30) * k); }
+      else if (C.size === "t") { ctx.textAlign = "right"; ctx.fillText("席札メーカー", (P[0] - 10) * k, (140 + 50) * k); }
+      else { ctx.textAlign = "left"; ctx.fillText("席札メーカー", 10 * k, 5.2 * k); }
+      ctx.restore();
+    }
+  }
+  function render(C, L, pi, dpi) {
+    var k = dpi / 25.4, c = document.createElement("canvas");
+    c.width = Math.round(L.P[0] * k); c.height = Math.round(L.P[1] * k);
+    var ctx = c.getContext("2d"); if (!ctx) return null;
+    drawPage(ctx, C, L, pi, k);
+    return c;
+  }
+
+  // ===== 画面 =====
+  var pvCanvas = null, lastC = null, lastL = null, CHUNK = 40;
+  function refresh() {
+    var C = conf(), L = layout(C);
+    lastC = C; lastL = L;
+    var ps = $("inPage"), cur = +ps.value || 0; ps.textContent = "";
+    L.pages.forEach(function (_, i) { var o = document.createElement("option"); o.value = i; o.textContent = (i + 1) + "ページ目"; ps.appendChild(o); });
+    cur = Math.min(cur, L.pages.length - 1); ps.value = cur;
+    $("pageField").classList.toggle("hidden", L.pages.length < 2);
+    var rs = $("inRange"), rcur = +rs.value || 0; rs.textContent = "";
+    for (var r = 0; r < L.pages.length; r += CHUNK) { var ro = document.createElement("option"); ro.value = r; ro.textContent = (r + 1) + "〜" + Math.min(L.pages.length, r + CHUNK) + "ページ目"; rs.appendChild(ro); }
+    rs.value = Math.min(rcur, Math.floor((L.pages.length - 1) / CHUNK) * CHUNK);
+    $("rangeField").classList.toggle("hidden", L.pages.length <= CHUNK);
+    if (!pvCanvas) { pvCanvas = document.createElement("canvas"); pvCanvas.setAttribute("role", "img"); }
+    var k = 900 / L.P[0], w = Math.round(L.P[0] * k), h = Math.round(L.P[1] * k);
+    if (pvCanvas.width !== w || pvCanvas.height !== h) { pvCanvas.width = w; pvCanvas.height = h; }
+    drawPage(pvCanvas.getContext("2d"), C, L, cur, k);
+    pvCanvas.setAttribute("aria-label", "席札の見本(" + C.S.name + "、" + (cur + 1) + "ページ目)");
+    var box = $("pv"); if (pvCanvas.parentNode !== box) { box.textContent = ""; box.appendChild(pvCanvas); }
+    var n = C.list.length;
+    setSt("sumNote", n ? n + "人・" + C.S.name + "・用紙" + L.pages.length + "枚(" + (C.S.paper[0] > C.S.paper[1] ? "A4横" : "A4縦") + ")" : "名前を入れると、ここに見本が出ます", false);
+    var warn = [];
+    if (C.cut) warn.push(EDITION === "full" ? "300人までです(301人目からは入りません)" : "無料版は12人までです(13人目からは入りません。買い切り版は300人まで)");
+    if (C.back === "msg" && !C.commonMsg && C.list.some(function (p) { return !p.msg; })) warn.push("メッセージがない人は、裏が空白になります");
+    if (C.skipped) warn.push("1列目(名前)が空の行が" + C.skipped + "行あり、入れていません");
+    var longs = C.list.filter(function (p) { return Array.from(p.name).length > (C.size === "s" || C.size === "m" ? 9 : 12); });
+    if (longs.length) warn.push("名前が長い人(" + longs.slice(0, 3).map(function (p) { return p.name; }).join("・") + (longs.length > 3 ? "ほか" : "") + ")は文字が小さくなります。会社名などは2列目の肩書きに分けてください");
+    setSt("warnNote", warn.join("。") + (warn.length ? "。" : ""), !!C.cut);
+    $("shapeNote").textContent = C.size === "t" ? "三角柱は、上の2面が表と裏、その下が底、いちばん下がのりしろです。のりしろを上の面のふちの裏に貼って留めます。" : C.size === "l" ? "A4横1枚で1人分です。下半分が表、上半分が裏の面です。" : "A4に4人分。下半分が表、上半分が裏の面です。";
+    if ($("msgField")) $("msgField").classList.toggle("hidden", C.back !== "msg");
+    save();
+  }
+
+  // ===== 自動保存 =====
+  var FIELDS = ["inNames", "inHonor", "inCommonTitle", "inSize", "inBack", "inCommonMsg", "inFont", "inFrame", "inColor"];
+  function save() { try { var o = {}; FIELDS.forEach(function (id) { if ($(id)) o[id] = $(id).value; }); o.inGuides = $("inGuides").checked; localStorage.setItem(STORE, JSON.stringify(o)); } catch (e) {} }
+  function load() {
+    try {
+      var o = JSON.parse(localStorage.getItem(STORE) || "null"); if (!o || typeof o !== "object") return;
+      FIELDS.forEach(function (id) { var v = o[id], el = $(id); if (typeof v !== "string" || !el) return; if (el.tagName === "SELECT") { if ([].some.call(el.options, function (op) { return op.value === v; })) el.value = v; } else el.value = v.slice(0, el.tagName === "TEXTAREA" ? 60000 : 40); });
+      if (typeof o.inGuides === "boolean") $("inGuides").checked = o.inGuides;
+    } catch (e) {}
+  }
+  $("clearBtn").addEventListener("click", function () {
+    if (!window.confirm("入力した名前・肩書き・メッセージを全部消しますか?(このブラウザに自動で保存した内容も消えます)")) return;
+    ["inNames", "inCommonTitle", "inCommonMsg"].forEach(function (id) { if ($(id)) $(id).value = ""; });
+    try { localStorage.removeItem(STORE); } catch (e) {}
+    refresh(); setSt("outSt", "消しました。");
+  });
+
+  // ===== イベント =====
+  var timer = null;
+  function later() { clearTimeout(timer); timer = setTimeout(function () { timer = null; refresh(); }, 250); }
+  function flush() { if (timer) { clearTimeout(timer); timer = null; refresh(); } }
+  ["inHonor", "inSize", "inBack", "inFont", "inFrame", "inColor", "inGuides", "inPage", "inRange"].forEach(function (id) { $(id).addEventListener("change", refresh); });
+  ["inNames", "inCommonTitle", "inCommonMsg"].forEach(function (id) { if ($(id)) $(id).addEventListener("input", later); });
+
+  // ===== 印刷・保存 =====
+  function toBlob(c) { return new Promise(function (res) { c.toBlob(function (b) { res(b); }, "image/png"); }); }
+  function download(blob, name) {
+    var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function () { URL.revokeObjectURL(a.href); }, 4000);
+  }
+  function rangeOf(L) { var a = +$("inRange").value || 0; return { a: a, b: Math.min(L.pages.length, a + CHUNK) }; }
+  function renderAll(C, L, dpi) {
+    var out = [], p = Promise.resolve(), R = rangeOf(L);
+    L.pages.slice(R.a, R.b).forEach(function (_, j) { var i = R.a + j; p = p.then(function () { var c = render(C, L, i, dpi); if (!c) throw new Error("canvas"); return toBlob(c).then(function (b) { c.width = c.height = 0; if (!b) throw new Error("blob"); out.push(b); }); }); });
+    return p.then(function () { return out; });
+  }
+  var busyFlag = false, printUrls = [];
+  function clearPrint() { printUrls.forEach(function (u) { URL.revokeObjectURL(u); }); printUrls = []; $("printArea").textContent = ""; document.body.classList.remove("printing"); $("pageStyle").textContent = "@page { size: A4 portrait; margin: 0; }"; }
+  function ready() {
+    flush();
+    if (!lastC.list.length) { setSt("outSt", "名前を1人以上入れてください。", true); return false; }
+    return true;
+  }
+  $("printBtn").addEventListener("click", function () {
+    if (busyFlag || !ready()) return;
+    var C = lastC, L = lastL, P = L.P, R = rangeOf(L), dpi = R.b - R.a > 20 ? 200 : 300;
+    busyFlag = true; clearPrint();
+    $("pageStyle").textContent = "@page { size: " + P[0] + "mm " + P[1] + "mm; margin: 0; }";
+    setSt("outSt", "印刷用の画像を作っています…");
+    renderAll(C, L, dpi).then(function (blobs) {
+      return Promise.all(blobs.map(function (b) {
+        return new Promise(function (res, rej) { var u = URL.createObjectURL(b), im = new Image(); printUrls.push(u); im.style.width = (P[0] - 0.3) + "mm"; im.style.height = (P[1] - 0.3) + "mm"; im.onload = res; im.onerror = function () { rej(new Error("img")); }; im.alt = ""; im.src = u; $("printArea").appendChild(im); });
+      })).then(function () { return blobs.length; });
+    }).then(function (cnt) {
+      document.body.classList.add("printing");
+      setSt("outSt", "印刷画面を開きました(" + cnt + "枚)。倍率は「100%」(実際のサイズ)にしてください。");
+      track("sekifuda_print", { n: C.list.length, size: C.size, back: C.back, pages: cnt });
+      setTimeout(function () { window.print(); }, 50);
+    }).catch(function () { clearPrint(); setSt("outSt", "印刷用の画像を作れませんでした。ページを読み込み直して、もう一度お試しください。", true); }).then(function () { busyFlag = false; });
+  });
+  window.addEventListener("afterprint", clearPrint);
+  var saveMany = function (blobs, names) {
+    var p = Promise.resolve();
+    blobs.forEach(function (b, i) { p = p.then(function () { download(b, names[i]); return new Promise(function (r) { setTimeout(r, 700); }); }); });
+    return p;
+  };
+  
+  $("pngBtn").addEventListener("click", function () {
+    if (busyFlag || !ready()) return;
+    var C = lastC, L = lastL;
+    var R = rangeOf(L), names = L.pages.slice(R.a, R.b).map(function (_, j) { return "席札_" + ("00" + (R.a + j + 1)).slice(-3) + ".png"; });
+    busyFlag = true; setSt("outSt", "画像を作っています…");
+    renderAll(C, L, R.b - R.a > 20 ? 200 : 300).then(function (blobs) {
+      var phone = window.matchMedia && matchMedia("(pointer:coarse)").matches, files = null;
+      track("sekifuda_save", { n: C.list.length, size: C.size, back: C.back, pages: blobs.length });
+      try { files = blobs.map(function (b, i) { return new File([b], names[i], { type: "image/png" }); }); } catch (e) {}
+      if (phone && files && navigator.canShare && navigator.canShare({ files: files })) {
+        setSt("outSt", "共有メニューが開きます。iPhoneは「画像を保存」、Androidは「ダウンロード」などを選んでください。");
+        return navigator.share({ files: files }).then(function () { setSt("outSt", "保存しました。"); }, function (err) {
+          if (err && err.name === "AbortError") { setSt("outSt", "共有をやめました。もう一度押すと保存できます。"); return; }
+          return saveMany(blobs, names, "席札.zip").then(function () { setSt("outSt", "保存しました。"); });
+        });
+      }
+      return saveMany(blobs, names, "席札_" + (R.a + 1) + "-" + R.b + "ページ.zip").then(function () { setSt("outSt", (blobs.length > 1 ? blobs.length + "枚の画像を" : "画像を") + "保存しました。" + (blobs.length > 1 && EDITION !== "full" ? "ブラウザが「複数のファイルのダウンロード」を確かめてきたら、許可してください。" : "")); });
+    }).catch(function () { setSt("outSt", "画像を作れませんでした。ページを読み込み直して、もう一度お試しください。", true); }).then(function () { busyFlag = false; });
+  });
+
+  if (EDITION === "full") $("pro-section").classList.add("hidden");
+  if (EDITION !== "full") {
+    $("privacyNote").innerHTML = '入力した内容はどこにも送信されません(すべてこのブラウザの中で処理し、このブラウザにだけ自動で保存します)。このページでは利用状況の把握のためにアクセス解析(Google Analytics)を使っています(入力した内容は含みません)。<a href="https://policies.google.com/technologies/partner-sites?hl=ja" target="_blank" rel="noopener">Googleによるデータの使用について</a>';
+  }
+  $("namesHint").textContent = (EDITION === "full" ? "300人まで。" : "12人まで(買い切り版は300人まで)。") + "名前は16文字まで。2列目に肩書き(24文字まで)" + (EDITION === "full" ? "、3列目にメッセージ(120文字まで)、4列目に卓名(8文字まで)" : "") + "を入れられます(Excelからの貼り付け、または「|」区切り)";
+  load();
+  refresh();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(refresh);
+})();
+</script>
+<!--UPSELL_JS_START-->
+<script>
+(function () {
+  "use strict";
+  var q = new URLSearchParams(location.search);
+  if (q.get("obs") === "1" || document.documentElement.classList.contains("obs")) return;
+  // 小さな案内(トースト)は、買い切り版がパソコン向けなので、マウス操作の広い画面でだけ出す
+  var pc = !!(window.matchMedia && matchMedia("(pointer:fine) and (min-width:720px)").matches);
+  var buy = document.getElementById("buyLink");
+  var pro = document.getElementById("pro-section");
+  if (!buy || !pro) return;
+  var FEATS = [];
+  var path = location.pathname.replace(/index\.html$/, "");
+  var KEY_CLOSED = "upsell_closed_until:" + path, KEY_SHOWN = "upsell_shown:" + path;
+  function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } }
+  function sess(k, v) { try { if (v === undefined) return sessionStorage.getItem(k); sessionStorage.setItem(k, v); } catch (e) { return null; } }
+  function gtagEv(name, p) { if (!window.dataLayer) return; (function () { window.dataLayer.push(arguments); })("event", name, p || {}); }
+
+  var shown = false;
+  function blocked() {
+    if (shown || sess(KEY_SHOWN) === "1") return true;
+    var until = Number(store(KEY_CLOSED) || 0);
+    return until && Date.now() < until;
+  }
+  function feats() {
+    if (FEATS.length) return FEATS;
+    var out = [];
+    var lis = pro.querySelectorAll(".feat-list li");
+    for (var i = 0; i < lis.length && out.length < 3; i++) {
+      var all = lis[i].textContent.replace(/\s+/g, " ").trim();
+      if (/スマホ|HTMLファイル|パソコンで使う/.test(all)) continue;
+      var st = lis[i].querySelectorAll("strong");
+      var t = st.length === 1 ? st[0].textContent : all.split(/[::。]/)[0];
+      t = t.replace(/[((][^()()]*[))]/g, "").replace(/\s+/g, " ").trim();
+      if (t.length > 40) t = t.slice(0, 39) + "…";
+      if (t) out.push(t);
+    }
+    return out;
+  }
+  // 「〜してください」「できません」など、失敗の表示が出ていたら案内しない
+  function failed() {
+    var els = document.querySelectorAll('[role="status"], [role="alert"], [aria-live]');
+    for (var i = 0; i < els.length; i++) {
+      if (pro.contains(els[i]) || !els[i].offsetParent) continue;
+      if (/ください|できません|できませんでした|失敗|ありません|エラー/.test(els[i].textContent)) return true;
+    }
+    return false;
+  }
+  function proVisible() {
+    var r = pro.getBoundingClientRect();
+    return r.top < innerHeight && r.bottom > 0;
+  }
+  function show(trigger) {
+    if (!pc || blocked() || (trigger === "action" && failed()) || proVisible()) return;
+    var list = feats();
+    if (!list.length) return;
+    shown = true;
+    sess(KEY_SHOWN, "1");
+    var box = document.createElement("aside");
+    box.className = "upsell-toast";
+    box.setAttribute("aria-label", "買い切り版のご案内");
+    box.setAttribute("aria-live", "polite");
+    document.body.appendChild(box);
+    var p = document.createElement("p");
+    p.textContent = trigger === "limit"
+      ? "この先は買い切り版の機能です。パソコン用の買い切り版(¥100・税込)なら:"
+      : "うまくできましたか? パソコン用の買い切り版(¥100・税込)なら、さらに:";
+    var ul = document.createElement("ul");
+    list.forEach(function (t) { var li = document.createElement("li"); li.textContent = t; ul.appendChild(li); });
+    var a = document.createElement("a");
+    a.className = "upsell-go";
+    a.id = "upsellToastLink";
+    a.href = buy.href;
+    a.target = "_blank";
+    a.rel = "noopener";
+    a.textContent = "BOOTHで見る(新しいタブ)";
+    var bg = getComputedStyle(buy).backgroundColor;
+    if (bg && !/rgba?\(0, 0, 0, 0\)|transparent/.test(bg)) a.style.background = bg;
+    var x = document.createElement("button");
+    x.type = "button";
+    x.className = "upsell-x";
+    x.setAttribute("aria-label", "この案内を閉じる");
+    x.textContent = "×";
+    function close(remember) {
+      if (box.parentNode) box.parentNode.removeChild(box);
+      document.removeEventListener("keydown", onKey);
+      if (remember) store(KEY_CLOSED, String(Date.now() + 7 * 864e5));
+    }
+    // Escはページ側の操作(選択解除など)にも使われるので、案内の中にフォーカスがある時だけ閉じる
+    function onKey(e) { if (e.key === "Escape" && box.contains(document.activeElement)) close(true); }
+    x.addEventListener("click", function () { close(true); });
+    a.addEventListener("click", function () { setTimeout(function () { close(false); }, 0); });
+    document.addEventListener("keydown", onKey);
+    setTimeout(function () {
+      var note = document.createElement("small");
+      note.className = "upsell-note";
+      note.textContent = "スマホではファイルを開けない機種があります";
+      box.appendChild(x); box.appendChild(p); box.appendChild(ul); box.appendChild(a); box.appendChild(note);
+    }, 50);
+    gtagEv("upsell_show", { trigger: trigger });
+  }
+
+  // 保存・コピー・印刷・書き出しを押した直後(結果を受け取れたタイミング)
+  var OK = /保存|コピー|印刷|書き出|ダウンロード|共有|PDF/;
+  var NG = /読み込|リセット|消|削除|このブラウザに保存|確認|イメージを見る|戻/;
+  document.addEventListener("click", function (e) {
+    var el = e.target && e.target.closest ? e.target.closest("button, a[download], input[type=button], input[type=submit]") : null;
+    if (!el || el.closest("#pro-section, .upsell-toast, #anshin")) return;
+    var label = (el.textContent || el.value || "").replace(/\s+/g, " ");
+    if (!OK.test(label) || NG.test(label)) return;
+    setTimeout(function () { show("action"); }, 1500);
+  }, true);
+
+  // 無料版の上限まわり
+  // (1) ページが出す「買い切り版」の一文に、購入欄へのリンクを足す(スマホでも)。🔒のタブは薄く表示されているので入れない
+  // (2) 案内(パソコンのみ)は、はっきりした合図のときだけ出す: 🔒のクリック・買い切り版にふれたalert・
+  //     初めて出た「〜まで/のみ/以降/入っていません」の上限の一文(計算のたびに出る誘導文や、同じ文の描き直しでは出さない)
+  var SKIP = "#pro-section, .upsell-toast, .upsell-top, #anshin, a, button, label, select, option, h1, h2, h3, .badge, header, footer, nav, textarea, pre, code, [contenteditable], svg";
+  var LIMIT = /まで|のみ|以降|入っていません/;
+  var seenText = {}, ready = false;
+  function goPro(e) {
+    if (e) e.preventDefault();
+    pro.setAttribute("tabindex", "-1");
+    pro.scrollIntoView({ behavior: "smooth", block: "start" });
+    pro.focus({ preventScroll: true });
+  }
+  function linkify(root, deep) {
+    var limitHit = false;
+    var els = root.matches("p, div, span, li") ? [root] : [];
+    if (deep) els = els.concat([].slice.call(root.querySelectorAll("p, div, span, li")));
+    els.forEach(function (el) {
+      if (el.closest(SKIP) || el.closest('[role="radio"], [role="option"], [role="tab"], [role="button"], [tabindex]:not([tabindex="-1"])') || el.querySelector("a, button, p, div, li, input, label")) return;
+      // 選択肢の「○○(買い切り版)」ではなく、文として買い切り版にふれている要素だけ
+      var own = "";
+      for (var n = el.firstChild; n; n = n.nodeType === 1 && n.className === "upsell-inline" ? null : n.nextSibling) if (n.nodeType === 3) own += n.nodeValue;
+      own = own.trim();
+      if (own.indexOf("買い切り版") < 0 || /[((]買い切り版[))]$/.test(own) || /^🔒/.test(own)) return;
+      var key = own.replace(/\d+/g, "#");
+      if (ready && !seenText[key] && LIMIT.test(own) && !el.closest(".teaser, #teaser, [id$=teaser], #tz")) limitHit = true;
+      seenText[key] = 1;
+      if (el.querySelector(".upsell-inline")) return;
+      var a = document.createElement("a");
+      a.className = "upsell-inline";
+      a.href = "#pro-section";
+      a.setAttribute("aria-label", "くわしく:買い切り版の説明へ移動");
+      a.textContent = "くわしく";
+      var ar = document.createElement("span");
+      ar.setAttribute("aria-hidden", "true");
+      ar.textContent = " ↓";
+      a.appendChild(ar);
+      a.addEventListener("click", goPro);
+      el.appendChild(document.createTextNode(" "));
+      el.appendChild(a);
+    });
+    return limitHit;
+  }
+  linkify(document.body, true);
+  setTimeout(function () { ready = true; }, 1500);
+  var topLink = document.querySelector("#upsellTop a");
+  if (topLink) topLink.addEventListener("click", goPro);
+  new MutationObserver(function (ms) {
+    // 変わったところだけを調べる(足された要素はその中も、文字の変更は親要素だけ)
+    var hit = false, done = new Set();
+    function check(t, deep) {
+      if (!t || t.nodeType !== 1 || done.has(t) || t.closest(".upsell-toast")) return;
+      done.add(t);
+      if (linkify(t, deep)) hit = true;
+    }
+    ms.forEach(function (m) {
+      if (m.type === "characterData") { check(m.target.parentNode, false); return; }
+      check(m.target, false);
+      for (var i = 0; i < m.addedNodes.length; i++) if (m.addedNodes[i].nodeType === 1) check(m.addedNodes[i], true);
+    });
+    if (hit) setTimeout(function () { show("limit"); }, 800);
+  }).observe(document.body, { childList: true, subtree: true, characterData: true });
+  document.addEventListener("click", function (e) {
+    var el = e.target && e.target.closest ? e.target.closest("button, div, span, li") : null;
+    var first = el && el.firstChild && el.firstChild.nodeType === 3 ? el.firstChild.nodeValue : "";
+    if (!/^\s*🔒/.test(first) || e.target.closest("#pro-section")) return;
+    if (pc) setTimeout(function () { show("limit"); }, 300); else goPro();
+  }, true);
+  var origAlert = window.alert;
+  window.alert = function (msg) {
+    var r = origAlert.apply(window, arguments);
+    if (/買い切り版/.test(String(msg))) setTimeout(function () { show("limit"); }, 300);
+    return r;
+  };
+})();
+</script>
+<!--UPSELL_JS_END-->
+</body>
+</html>
